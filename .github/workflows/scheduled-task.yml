@@ -1,0 +1,14 @@
+name: Run Task Every 5 Minutes
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+
+jobs:
+  run-task:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Base44 Function
+        run: |
+          curl -X POST https://projetobranco.base44.app/api/apps/69582b4b8596ea9ad6a1a4d2/functions/EnviarMensagemProgramada \
+            -H "Content-Type: application/json"
