@@ -1,8 +1,9 @@
-name: Run Task Every 1 Minutes
+name: Run Task Every 1 Minute
 
 on:
   schedule:
     - cron: '*/1 * * * *'
+  workflow_dispatch:
 
 jobs:
   run-task:
@@ -10,5 +11,11 @@ jobs:
     steps:
       - name: Call Base44 Function
         run: |
-          curl -X POST https://projetobranco.base44.app/api/apps/69582b4b8596ea9ad6a1a4d2/functions/EnviarMensagemProgramada \
-            -H "Content-Type: application/json"
+          response=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+            https://projetobranco.base44.app/api/apps/69582b4b8596ea9ad6a1a4d2/functions/EnviarMensagemProgramada \
+            -H "Content-Type: application/json")
+
+          if [ "$response" -ne 200 ]; then
+            echo "Erro ao chamar função. HTTP $response"
+            exit 1
+          fi
